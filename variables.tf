@@ -91,6 +91,27 @@ variable "user_password" {
   default = null
 }
 
+## Read replicas
+variable "replica_enabled" {
+  description = "Whether to create a read replica or not."
+  type        = bool
+  default     = true
+}
+
+variable "replica_private_network" {
+  description = "Describes the private network you want to connect to your read replica."
+  type = object({
+    pn_id  = string
+    ip_net = string
+  })
+  default = null
+}
+
+variable "replica_region" {
+  description = "Region in which the replica should be created. Ressource will be created in the same region than the master if null."
+  type        = string
+  default     = null
+}
 
 ## Scaleway tenancy
 variable "project_id" {

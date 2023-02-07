@@ -38,3 +38,19 @@ resource "scaleway_rdb_instance" "this" {
     }
   }
 }
+
+resource "scaleway_rdb_read_replica" "this" {
+  count = var.replica_enabled ? 1 : 0
+
+  instance_id = scaleway_rdb_instance.this.id
+  region      = var.replica_region != null ? var.replica_region : scaleway_rdb_instance.this.region
+  #  direct_access = var.replica_direct_access
+
+  dynamic "private_network" {
+    for_each = var.replica_private_network != null ? [1] : []
+    content {
+      private_network_id = try(var.replica_private_network.pn_id, null)
+      service_ip         = try(var.replica_private_network.ip_net, null)
+    }
+  }
+}

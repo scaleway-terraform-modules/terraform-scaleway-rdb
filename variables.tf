@@ -1,30 +1,30 @@
 ## Instance topology
 variable "engine" {
   description = "Database Instance's engine version (e.g. PostgreSQL-11)."
-  type = string
+  type        = string
 }
 
 variable "ha_enabled" {
   description = "Enable or disable high availability for the database instance."
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
 
 variable "name" {
   description = "Name of the Database Instance"
-  type = string
+  type        = string
 }
 
 variable "node_type" {
   description = "Type of database instance you want to create (e.g. db-dev-s)."
-  type = string
+  type        = string
 }
 
 ## Network
 variable "private_network" {
   description = "Describes the private network you want to connect to your cluster. If not set, a public network will be provided."
   type = object({
-    pn_id   = string
+    pn_id  = string
     ip_net = string
   })
   default = null
@@ -33,8 +33,8 @@ variable "private_network" {
 ## Storage
 variable "volume_type" {
   description = "Type of volume where data are stored (bssd or lssd)."
-  type = string
-  default = "lssd"
+  type        = string
+  default     = "lssd"
 
   validation {
     condition     = contains(["bssd", "lssd"], var.volume_type)
@@ -44,39 +44,39 @@ variable "volume_type" {
 
 variable "volume_size_in_gb" {
   description = "Volume size (in GB) when volume_type is set to bssd. Must be a multiple of 5000000000."
-  type = number
-  default = null
+  type        = number
+  default     = null
 }
 
 ## Backup
 variable "backup_disabled" {
   description = "Disable automated backup for the database instance."
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
 
 variable "backup_same_region" {
   description = "Whether logical backups are stored in the same region as the database instance."
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
 
 variable "backup_schedule_frequency" {
   description = "Backup schedule frequency in hours."
-  type = number
-  default = 24
+  type        = number
+  default     = 24
 }
 
 variable "backup_schedule_retention" {
   description = "Backup schedule retention in days."
-  type = number
-  default = 7
+  type        = number
+  default     = 7
 }
 
 ## User informations
 variable "user_name" {
   description = "Identifier for the first user of the database instance. **Warning** Changing the user_name will recreate the Database Instance."
-  type = string
+  type        = string
 
   validation {
     condition     = can(regex("^[-_a-zA-Z0-9]{1,63}$", var.user_name))
@@ -86,9 +86,9 @@ variable "user_name" {
 
 variable "user_password" {
   description = "Password for the first user of the database instance. A random password will be generated if null."
-  sensitive = true
-  type = string
-  default = null
+  sensitive   = true
+  type        = string
+  default     = null
 }
 
 ## Read replicas

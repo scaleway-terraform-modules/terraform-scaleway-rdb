@@ -15,11 +15,11 @@ output "load_balancer" {
 
 output "replicate_pn" {
   description = "Private network attributes of the read replica."
-  value       = scaleway_rdb_read_replica.this.*.private_network
+  value       = scaleway_rdb_read_replica.this[*].private_network
 }
 
 output "user_password" {
   description = "Password generated if non were given."
   sensitive   = true
-  value       = try(random_password.this.0.result, null)
+  value       = try(random_password.this[0].result, null)
 }

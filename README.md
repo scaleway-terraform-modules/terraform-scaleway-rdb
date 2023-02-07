@@ -32,6 +32,7 @@ module "my_cluster" {
 |------|------|
 | [random_password.this](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [scaleway_rdb_instance.this](https://registry.terraform.io/providers/scaleway/scaleway/latest/docs/resources/rdb_instance) | resource |
+| [scaleway_rdb_read_replica.this](https://registry.terraform.io/providers/scaleway/scaleway/latest/docs/resources/rdb_read_replica) | resource |
 
 ## Inputs
 
@@ -49,6 +50,9 @@ module "my_cluster" {
 | <a name="input_private_network"></a> [private_network](#input_private_network) | Describes the private network you want to connect to your cluster. If not set, a public network will be provided. | ```object({ pn_id = string ip_net = string })``` | `null` | no |
 | <a name="input_project_id"></a> [project_id](#input_project_id) | ID of the project the instance is associated with. Ressource will be created in the project set at the provider level if null. | `string` | `null` | no |
 | <a name="input_region"></a> [region](#input_region) | Region in which the instance should be created. Ressource will be created in the region set at the provider level if null. | `string` | `null` | no |
+| <a name="input_replica_enabled"></a> [replica_enabled](#input_replica_enabled) | Whether to create a read replica or not. | `bool` | `true` | no |
+| <a name="input_replica_private_network"></a> [replica_private_network](#input_replica_private_network) | Describes the private network you want to connect to your read replica. | ```object({ pn_id = string ip_net = string })``` | `null` | no |
+| <a name="input_replica_region"></a> [replica_region](#input_replica_region) | Region in which the replica should be created. Ressource will be created in the same region than the master if null. | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input_tags) | Tags associated with the server and dedicated ip address. | `list(string)` | `[]` | no |
 | <a name="input_user_password"></a> [user_password](#input_user_password) | Password for the first user of the database instance. A random password will be generated if null. | `string` | `null` | no |
 | <a name="input_volume_size_in_gb"></a> [volume_size_in_gb](#input_volume_size_in_gb) | Volume size (in GB) when volume_type is set to bssd. Must be a multiple of 5000000000. | `number` | `null` | no |
@@ -61,6 +65,7 @@ module "my_cluster" {
 | <a name="output_cluster_certificate"></a> [cluster_certificate](#output_cluster_certificate) | PEM Certificate of the database instance. |
 | <a name="output_instance_id"></a> [instance_id](#output_instance_id) | ID of the Database Instance. |
 | <a name="output_load_balancer"></a> [load_balancer](#output_load_balancer) | List of load balancer endpoints of the database instance. |
+| <a name="output_replicate_pn"></a> [replicate_pn](#output_replicate_pn) | Private network attributes of the read replica. |
 | <a name="output_user_password"></a> [user_password](#output_user_password) | Password generated if non were given. |
 <!-- END_TF_DOCS -->
 

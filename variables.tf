@@ -24,8 +24,9 @@ variable "node_type" {
 variable "private_network" {
   description = "Describes the private network you want to connect to your cluster. If not set, a public network will be provided."
   type = object({
-    pn_id  = string
-    ip_net = string
+    pn_id       = string
+    ip_net      = optional(string)
+    enable_ipam = optional(bool)
   })
   default = null
 }

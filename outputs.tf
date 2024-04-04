@@ -8,6 +8,11 @@ output "instance_id" {
   value       = scaleway_rdb_instance.this.id
 }
 
+output "instance_ip" {
+  description = "Database instance IP"
+  value       = scaleway_rdb_instance.this.private_network[*].ip
+}
+
 output "load_balancer" {
   description = "List of load balancer endpoints of the database instance."
   value       = scaleway_rdb_instance.this.load_balancer

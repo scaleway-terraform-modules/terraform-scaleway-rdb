@@ -33,8 +33,9 @@ resource "scaleway_rdb_instance" "this" {
   dynamic "private_network" {
     for_each = var.private_network != null ? [1] : []
     content {
-      pn_id  = try(var.private_network.pn_id, null)
-      ip_net = try(var.private_network.ip_net, null)
+      pn_id       = try(var.private_network.pn_id, null)
+      ip_net      = try(var.private_network.ip_net, null)
+      enable_ipam = try(var.private_network.enable_ipam, false)
     }
   }
 }

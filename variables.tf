@@ -20,6 +20,12 @@ variable "node_type" {
   type        = string
 }
 
+variable "settings" {
+  description = "Database settings configuration"
+  type        = map(string)
+  default     = {}
+}
+
 ## Network
 variable "private_network" {
   description = "Describes the private network you want to connect to your cluster. If not set, a public network will be provided."

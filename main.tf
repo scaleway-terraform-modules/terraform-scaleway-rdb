@@ -38,6 +38,8 @@ resource "scaleway_rdb_instance" "this" {
       enable_ipam = try(var.private_network.enable_ipam, false)
     }
   }
+
+  settings = var.settings
 }
 
 resource "scaleway_rdb_read_replica" "this" {

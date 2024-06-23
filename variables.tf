@@ -23,7 +23,7 @@ variable "node_type" {
 variable "settings" {
   description = "Database settings configuration"
   type        = map(string)
-  default     = {}
+  default     = null
 }
 
 ## Network

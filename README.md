@@ -53,7 +53,7 @@ module "my_cluster" {
 | <a name="input_replica_enabled"></a> [replica_enabled](#input_replica_enabled) | Whether to create a read replica or not. | `bool` | `true` | no |
 | <a name="input_replica_private_network"></a> [replica_private_network](#input_replica_private_network) | Describes the private network you want to connect to your read replica. | ```object({ pn_id = string ip_net = string })``` | `null` | no |
 | <a name="input_replica_region"></a> [replica_region](#input_replica_region) | Region in which the replica should be created. Ressource will be created in the same region than the master if null. | `string` | `null` | no |
-| <a name="input_settings"></a> [settings](#input_settings) | Database settings configuration | `map(string)` | `{}` | no |
+| <a name="input_settings"></a> [settings](#input_settings) | Database settings configuration | `map(string)` | `null` | no |
 | <a name="input_tags"></a> [tags](#input_tags) | Tags associated with the server and dedicated ip address. | `list(string)` | `[]` | no |
 | <a name="input_user_password"></a> [user_password](#input_user_password) | Password for the first user of the database instance. A random password will be generated if null. | `string` | `null` | no |
 | <a name="input_volume_size_in_gb"></a> [volume_size_in_gb](#input_volume_size_in_gb) | Volume size (in GB) when volume_type is set to bssd. Must be a multiple of 5000000000. | `number` | `null` | no |

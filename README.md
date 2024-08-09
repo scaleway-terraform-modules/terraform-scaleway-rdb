@@ -24,7 +24,7 @@ module "my_cluster" {
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement_terraform) | >= 0.13 |
 | <a name="requirement_random"></a> [random](#requirement_random) | >= 3.4.3 |
-| <a name="requirement_scaleway"></a> [scaleway](#requirement_scaleway) | >= 2.3.0 |
+| <a name="requirement_scaleway"></a> [scaleway](#requirement_scaleway) | >= 2.43.0 |
 
 ## Resources
 
@@ -46,6 +46,7 @@ module "my_cluster" {
 | <a name="input_backup_same_region"></a> [backup_same_region](#input_backup_same_region) | Whether logical backups are stored in the same region as the database instance. | `bool` | `false` | no |
 | <a name="input_backup_schedule_frequency"></a> [backup_schedule_frequency](#input_backup_schedule_frequency) | Backup schedule frequency in hours. | `number` | `24` | no |
 | <a name="input_backup_schedule_retention"></a> [backup_schedule_retention](#input_backup_schedule_retention) | Backup schedule retention in days. | `number` | `7` | no |
+| <a name="input_enable_encryption"></a> [enable_encryption](#input_enable_encryption) | Enable encryption at rest for the Database Instance. | `bool` | `true` | no |
 | <a name="input_ha_enabled"></a> [ha_enabled](#input_ha_enabled) | Enable or disable high availability for the database instance. | `bool` | `false` | no |
 | <a name="input_private_network"></a> [private_network](#input_private_network) | Describes the private network you want to connect to your cluster. If not set, a public network will be provided. | ```object({ pn_id = string ip_net = optional(string) enable_ipam = optional(bool) })``` | `null` | no |
 | <a name="input_project_id"></a> [project_id](#input_project_id) | ID of the project the instance is associated with. Ressource will be created in the project set at the provider level if null. | `string` | `null` | no |

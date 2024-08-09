@@ -15,8 +15,9 @@ resource "scaleway_rdb_instance" "this" {
   name          = var.name
   node_type     = var.node_type
 
-  volume_size_in_gb = var.volume_size_in_gb
-  volume_type       = var.volume_type
+  encryption_at_rest = var.enable_encryption
+  volume_size_in_gb  = var.volume_size_in_gb
+  volume_type        = var.volume_type
 
   user_name = var.user_name
   password  = var.user_password != null ? var.user_password : random_password.this[0].result

@@ -38,6 +38,12 @@ variable "private_network" {
 }
 
 ## Storage
+variable "enable_encryption" {
+  description = "Enable encryption at rest for the Database Instance."
+  type        = bool
+  default     = true
+}
+
 variable "volume_type" {
   description = "Type of volume where data are stored (bssd or lssd)."
   type        = string

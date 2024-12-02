@@ -58,7 +58,7 @@ module "my_cluster" {
 | <a name="input_tags"></a> [tags](#input_tags) | Tags associated with the server and dedicated ip address. | `list(string)` | `[]` | no |
 | <a name="input_user_password"></a> [user_password](#input_user_password) | Password for the first user of the database instance. A random password will be generated if null. | `string` | `null` | no |
 | <a name="input_volume_size_in_gb"></a> [volume_size_in_gb](#input_volume_size_in_gb) | Volume size (in GB) when volume_type is set to bssd. Must be a multiple of 5000000000. | `number` | `null` | no |
-| <a name="input_volume_type"></a> [volume_type](#input_volume_type) | Type of volume where data are stored (bssd or lssd). | `string` | `"lssd"` | no |
+| <a name="input_volume_type"></a> [volume_type](#input_volume_type) | Type of volume where data are stored (bssd, lssd, sbs_5k or sbs_15k). | `string` | `"lssd"` | no |
 
 ## Outputs
 

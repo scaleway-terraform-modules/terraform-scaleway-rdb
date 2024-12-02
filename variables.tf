@@ -45,13 +45,13 @@ variable "enable_encryption" {
 }
 
 variable "volume_type" {
-  description = "Type of volume where data are stored (bssd or lssd)."
+  description = "Type of volume where data are stored (bssd, lssd, sbs_5k or sbs_15k)."
   type        = string
   default     = "lssd"
 
   validation {
-    condition     = contains(["bssd", "lssd"], var.volume_type)
-    error_message = "Volumes can only be one of 'bssd' or 'lssd'."
+    condition     = contains(["bssd", "lssd", "sbs_5k", "sbs_15k"], var.volume_type)
+    error_message = "Volumes can only be one of 'bssd', 'lssd', 'sbs_5k' or 'sbs_15k'."
   }
 }
 

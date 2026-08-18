@@ -172,6 +172,13 @@ variable "users" {
     ])
     error_message = "Each user in `users` must set exactly one of `password` or `password_wo`."
   }
+
+  validation {
+    condition = alltrue([
+      for name, user in var.users : user.password_wo == null || user.password_wo_version != null
+    ])
+    error_message = "`password_wo_version` must be set for each user in `users` that uses `password_wo`."
+  }
 }
 
 ## Privileges

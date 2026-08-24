@@ -1,7 +1,14 @@
 ## Instance topology
 variable "engine" {
-  description = "Database Instance's engine version (e.g. PostgreSQL-11)."
+  description = "Database Instance's engine version (e.g. PostgreSQL-11). Mutually exclusive with `snapshot_id`; exactly one of the two must be set."
   type        = string
+  default     = null
+}
+
+variable "init_settings" {
+  description = "Map of engine settings to be set at database initialisation. Updating this recreates the Database Instance."
+  type        = map(string)
+  default     = null
 }
 
 variable "ha_enabled" {
@@ -26,6 +33,13 @@ variable "settings" {
   default     = null
 }
 
+## Restore
+variable "snapshot_id" {
+  description = "ID of an existing snapshot to restore or create the Database Instance from. Mutually exclusive with `engine`; exactly one of the two must be set."
+  type        = string
+  default     = null
+}
+
 ## Network
 variable "private_network" {
   description = "Describes the private network you want to connect to your cluster. If not set, a public network will be provided."
@@ -37,6 +51,12 @@ variable "private_network" {
   default = null
 }
 
+variable "enable_load_balancer" {
+  description = "Whether to also provision a public load-balancer endpoint alongside `private_network`. Has no effect when `private_network` is not set, since a public endpoint is already provisioned by default in that case."
+  type        = bool
+  default     = false
+}
+
 ## Storage
 variable "enable_encryption" {
   description = "Enable encryption at rest for the Database Instance."
@@ -45,7 +65,7 @@ variable "enable_encryption" {
 }
 
 variable "volume_type" {
-  description = "Type of volume where data are stored (bssd, lssd, sbs_5k or sbs_15k)."
+  description = "Type of volume where data are stored (lssd, sbs_5k or sbs_15k). 'bssd' is accepted for backward compatibility but is a legacy type no longer documented by the provider; prefer sbs_5k or sbs_15k."
   type        = string
   default     = "lssd"
 
@@ -56,7 +76,7 @@ variable "volume_type" {
 }
 
 variable "volume_size_in_gb" {
-  description = "Volume size (in GB) when volume_type is set to bssd. Must be a multiple of 5000000000."
+  description = "Volume size (in GB) when volume_type is not lssd."
   type        = number
   default     = null
 }
@@ -98,10 +118,85 @@ variable "user_name" {
 }
 
 variable "user_password" {
-  description = "Password for the first user of the database instance. A random password will be generated if null."
+  description = "Password for the first user of the database instance. A random password will be generated if this and `user_password_wo` are both null. Mutually exclusive with `user_password_wo`."
   sensitive   = true
   type        = string
   default     = null
+}
+
+variable "user_password_wo" {
+  description = "Write-only password for the first user of the database instance (never stored in Terraform state). Mutually exclusive with `user_password`. Requires Terraform >= 1.11. To rotate the value, increment `user_password_wo_version`."
+  sensitive   = true
+  type        = string
+  default     = null
+}
+
+variable "user_password_wo_version" {
+  description = "Version marker for `user_password_wo`. Must be incremented whenever `user_password_wo` changes to trigger the password update."
+  type        = number
+  default     = null
+}
+
+## Access control
+variable "acl_rules" {
+  description = "List of authorized IP rules for the Database Instance's public endpoint. Leave empty (default) to manage ACLs outside this module."
+  type = list(object({
+    ip          = string
+    description = optional(string)
+  }))
+  default = []
+}
+
+## Databases
+variable "database_names" {
+  description = "Names of additional databases to create on the Database Instance, beyond the default one created with the instance."
+  type        = set(string)
+  default     = []
+}
+
+## Additional users
+variable "users" {
+  description = "Map of additional database users to create, keyed by user name. Exactly one of `password` or `password_wo` must be set per user."
+  type = map(object({
+    password            = optional(string)
+    password_wo         = optional(string)
+    password_wo_version = optional(number)
+    is_admin            = optional(bool, false)
+  }))
+  default   = {}
+  sensitive = true
+
+  validation {
+    condition = alltrue([
+      for name, user in var.users : (user.password != null) != (user.password_wo != null)
+    ])
+    error_message = "Each user in `users` must set exactly one of `password` or `password_wo`."
+  }
+
+  validation {
+    condition = alltrue([
+      for name, user in var.users : user.password_wo == null || user.password_wo_version != null
+    ])
+    error_message = "`password_wo_version` must be set for each user in `users` that uses `password_wo`."
+  }
+}
+
+## Privileges
+variable "privileges" {
+  description = "List of database privilege grants, mapping a user to a database with a permission level."
+  type = list(object({
+    user_name     = string
+    database_name = string
+    permission    = string
+  }))
+  default = []
+
+  validation {
+    condition = alltrue([
+      for p in var.privileges : contains(["readonly", "readwrite", "all", "custom", "none"], p.permission)
+    ])
+    error_message = "Each privilege's `permission` must be one of: readonly, readwrite, all, custom, none."
+  }
 }
 
 ## Read replicas
@@ -112,10 +207,11 @@ variable "replica_enabled" {
 }
 
 variable "replica_private_network" {
-  description = "Describes the private network you want to connect to your read replica."
+  description = "Describes the private network you want to connect to your read replica. If not set, the read replica gets a public direct-access endpoint instead."
   type = object({
-    pn_id  = string
-    ip_net = string
+    pn_id       = string
+    ip_net      = optional(string)
+    enable_ipam = optional(bool)
   })
   default = null
 }
@@ -124,6 +220,21 @@ variable "replica_region" {
   description = "Region in which the replica should be created. Ressource will be created in the same region than the master if null."
   type        = string
   default     = null
+}
+
+variable "replica_same_zone" {
+  description = "Defines whether the replica is created in the same availability zone as the main instance."
+  type        = bool
+  default     = null
+}
+
+## Manual snapshots
+variable "snapshots" {
+  description = "Map of manual snapshots to create for the Database Instance, keyed by snapshot name."
+  type = map(object({
+    expires_at = optional(string)
+  }))
+  default = {}
 }
 
 ## Scaleway tenancy

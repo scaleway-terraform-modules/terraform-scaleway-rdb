@@ -93,7 +93,7 @@ module "my_cluster" {
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement_terraform) | >= 1.11 |
 | <a name="requirement_random"></a> [random](#requirement_random) | >= 3.4.3 |
-| <a name="requirement_scaleway"></a> [scaleway](#requirement_scaleway) | >= 2.68.0 |
+| <a name="requirement_scaleway"></a> [scaleway](#requirement_scaleway) | >= 2.79.0 |
 
 ## Resources
 

@@ -12,7 +12,7 @@ This repository is used to manage a Relationnal Database on scaleway using terra
 ```hcl
 module "my_cluster" {
   source  = "scaleway-terraform-modules/rdb/scaleway"
-  version = "~> 1.1.0"
+  version = "~> 2.0"
 
   name      = "my-database"
   engine    = "PostgreSQL-15"
@@ -28,7 +28,7 @@ Use `user_password_wo` instead of `user_password` to avoid storing the password 
 ```hcl
 module "my_cluster" {
   source  = "scaleway-terraform-modules/rdb/scaleway"
-  version = "~> 1.1.0"
+  version = "~> 2.0"
 
   name      = "my-database"
   engine    = "PostgreSQL-15"
@@ -47,7 +47,7 @@ Set `snapshot_id` instead of `engine` to create the instance from an existing sn
 ```hcl
 module "my_cluster" {
   source  = "scaleway-terraform-modules/rdb/scaleway"
-  version = "~> 1.1.0"
+  version = "~> 2.0"
 
   name        = "my-database"
   snapshot_id = "11111111-1111-1111-1111-111111111111"
@@ -61,7 +61,7 @@ module "my_cluster" {
 ```hcl
 module "my_cluster" {
   source  = "scaleway-terraform-modules/rdb/scaleway"
-  version = "~> 1.1.0"
+  version = "~> 2.0"
 
   name      = "my-database"
   engine    = "PostgreSQL-15"
